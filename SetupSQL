@@ -1,0 +1,25 @@
+CREATE DATABASE TF;
+
+use TF;
+
+CREATE TABLE Users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Turfs (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    location VARCHAR(200) NOT NULL,
+    capacity INTEGER NOT NULL
+);
+
+CREATE TABLE Bookings (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES Users(id),
+    turf_id INTEGER REFERENCES Turfs(id),
+    start_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP NOT NULL
+);

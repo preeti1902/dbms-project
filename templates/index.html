@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='grid.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='normalize.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='ionicons.min.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Turf Manager</title>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="row title">
+                <!-- <img src="..\images\tm_new.png" alt="TM logo" class="logo"> -->
+                <ul class="main-nav">
+                    <li><a href="#register">Create User</a></li>
+                    <li><a href="#turf">Add Turf</a></li>
+                    <li><a href="#booking">Book Slot</a></li>
+                    <li><a href="/gallery">Gallery</a></li>
+                    
+                    
+                </ul>
+            </div>
+        </nav>
+        <div class="hero-text-box">
+            <h1>the official hub of players and turfs.</h1>
+            <a class="btn full" href="#booking">Book a Slot</a>
+            <a class="btn ghost" href="#register">Register Here</a>
+            <a class="btn full" href="/login">Login</a>
+        </div>
+    </header>
+    
+    {% with messages=get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert {{ category }}">
+                <span class="alert-message">{{ message }}</span>
+                <button class="close-alert" onclick="this.parentElement.style.display='none';">×</button>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+    <section class="section-cities" id="register">
+        <h2 class="head">REGISTER HERE</h2>
+        <div class="row flex-container">
+            <input type="text" id="username" placeholder="Username"><br>
+            <input type="text" id="email" placeholder="Email"><br>
+            <input type="password" id="password" placeholder="Password"><br>
+            <button class="btn-main" onclick="createUser()">Create User</button>
+        </div>
+    </section>
+    <section class="section-cities" id="turf">
+        <h2 class="head">ADD YOUR TURF</h2>
+        <div class="row flex-container">
+            <input type="text" id="turfName" placeholder="Turf Name"><br>
+            <input type="text" id="location" placeholder="Location"><br>
+            <input type="number" id="capacity" placeholder="Capacity"><br>
+            <button class="btn-main" onclick="createTurf()">Create Turf</button>
+        </div>
+    </section>
+    <section class="section-cities" id="booking">
+        <h2 class="head">BOOK A SLOT</h2>
+        <div class="row flex-container">
+            <input type="text" id="userId" placeholder="Username"><br>
+            <select id="locationInput" placeholder="Location">
+                <option value="" disabled selected>Select Location</option>
+            </select><br>
+            <!-- End of changed location input field -->
+            <input type="datetime-local" id="startTime"><br>
+            <input type="datetime-local" id="endTime"><br>
+            <button class="btn-main" onclick="createBooking()">Create Booking</button>
+        </div>
+    </section>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script>
+        async function createUser() {
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const response = await fetch('/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: username,
+                    email: email,
+                    password: password
+                })
+            });
+
+            const result = await response.json();
+            alert(result.message);
+        }
+
+        async function createTurf() {
+            const name = document.getElementById('turfName').value;
+            const location = document.getElementById('location').value;
+            const capacity = document.getElementById('capacity').value;
+
+            const response = await fetch('/turfs', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: name,
+                    location: location,
+                    capacity: capacity
+                })
+            });
+
+            const result = await response.json();
+            alert(result.message);
+        }
+
+        async function createBooking() {
+            const userId = document.getElementById('userId').value;
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
+
+            const response = await fetch('/bookings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user_id: userId,
+                    start_time: startTime,
+                    end_time: endTime
+                })
+            });
+
+            const result = await response.json();
+            alert(result.message);
+        }
+
+        // Add this function to fetch locations from the backend
+        async function fetchLocations() {
+            const response = await fetch('/locations');
+            const locations = await response.json();
+
+            const locationInput = document.getElementById('locationInput');
+            locationInput.innerHTML = '';
+
+            locations.forEach(location => {
+                // Create option element for each location
+                const option = document.createElement('option');
+                option.value = location;
+                option.textContent = location;
+                locationInput.appendChild(option);
+            });
+        }
+
+        // Call fetchLocations function when the page loads
+        window.onload = fetchLocations;
+
+
+        async function fetchBookings() {
+            const response = await fetch('/bookings');
+            const bookings = await response.json();
+
+            const bookingsList = document.getElementById('bookings');
+            bookingsList.innerHTML = '';
+
+            bookings.forEach(booking => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `Booking ID: ${booking.id}, User ID: ${booking.user_id}, Turf ID: ${booking.turf_id}, Start Time: ${booking.start_time}, End Time: ${booking.end_time}`;
+                bookingsList.appendChild(listItem);
+            });
+        }
+    </script>
+</body>
+
+</html>

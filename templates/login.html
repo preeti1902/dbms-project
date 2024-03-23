@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    
+    {% block style %}    {% endblock style %}
+</head>
+{% extends 'base.html' %}
+  {% block body %}
+  <!-- <div class="container mt-3">
+      
+      <div class="row" >
+          
+          <div class="col-md-4"> </div>
+          <div class="col-md-4 jumbotron mt-3"> -->
+              <br>              
+              {% with messages=get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert {{ category }}">
+                <span class="alert-message">{{ message }}</span>
+                <button class="close-alert" onclick="this.parentElement.style.display='none';">×</button>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+              <!-- <form action="/login" method="POST">
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username" required><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" required><br><br>
+        <input type="submit" >
+    </form> -->
+
+    <div class="container mt-3">
+        <div class="row">
+          <!-- Bootstrap has total 12 Columns and 3 Rows  -->
+      
+            <div class="col-md-1"></div>
+          
+            <div style="background-color: rgb(225, 255, 0);" class="col-md-11 jumbotron ">
+            <h4 class="text-lg-center text-black">Login</h4><br>
+            <form action="/login" method="POST">
+              <div class="mb-3">
+                <label for="username" class="text-black form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+              </div>
+              <div class="mb-3">
+                <label for="password" class="text-black form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+              </div>
+              <br>
+              <div class="d-grid gap-2">
+                <button style="background-color: rgb(0, 255, 0);" type="submit" class=" btn btn-outline-dark text-black">Login</button>
+              </div>
+              <br>
+              New to TMS? <a class="text-primary" href="/">Create Account</a>
+            </form>
+            </div>
+
+            <!-- <div class="col-md-3"></div> -->
+      
+      
+        </div>
+      
+    </div>
+      
+    {% endblock body %}
+</body>
+</html>

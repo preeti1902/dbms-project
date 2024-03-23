@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turf Management System</title>
+</head>
+<body>
+    <h1>Turf Management System</h1>
+
+    <h2>Create User</h2>
+    <input type="text" id="username" placeholder="Username"><br>
+    <input type="text" id="email" placeholder="Email"><br>
+    <input type="password" id="password" placeholder="Password"><br>
+    <button onclick="createUser()">Create User</button>
+
+    <h2>Create Turf</h2>
+    <input type="text" id="turfName" placeholder="Turf Name"><br>
+    <input type="text" id="location" placeholder="Location"><br>
+    <input type="number" id="capacity" placeholder="Capacity"><br>
+    <button onclick="createTurf()">Create Turf</button>
+
+    <h2>Create Booking</h2>
+    <input type="number" id="userId" placeholder="User ID"><br>
+    <input type="number" id="turfId" placeholder="Turf ID"><br>
+    <input type="datetime-local" id="startTime"><br>
+    <input type="datetime-local" id="endTime"><br>
+    <button onclick="createBooking()">Create Booking</button>
+
+    <h2>All Bookings</h2>
+    <ul id="bookings"></ul>
